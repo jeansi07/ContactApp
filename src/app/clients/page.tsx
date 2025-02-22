@@ -1,5 +1,6 @@
 "use client";
 
+import { LoaderTable } from "@/components/Loader";
 import { Table } from "@/components/Table";
 import { getAllClient } from "@/services/client";
 import { useEffect, useState } from "react";
@@ -12,12 +13,16 @@ interface ClientProps {
 }
 const ClientsPage = () => {
   const [client, setClient] = useState<ClientProps[]>();
+  const [Loader, setLoader] = useState(true);
   const getClient = async () => {
+    setLoader(true);
     try {
       const resp = await getAllClient();
       setClient(resp);
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -59,11 +64,15 @@ const ClientsPage = () => {
 
   return (
     <div>
-      <Table
-        renderItems={renderClientItem}
-        data={client ?? []}
-        renderHeader={headerTableClient}
-      />
+      {Loader ? (
+        <LoaderTable />
+      ) : (
+        <Table
+          renderItems={renderClientItem}
+          data={client ?? []}
+          renderHeader={headerTableClient}
+        />
+      )}
     </div>
   );
 };

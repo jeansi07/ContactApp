@@ -1,4 +1,5 @@
 "use client";
+import { LoaderTable } from "@/components/Loader";
 import { Table } from "@/components/Table";
 import { getAllOperator } from "@/services/operator";
 import { useEffect, useState } from "react";
@@ -17,14 +18,18 @@ const OperatorPage = () => {
     []
   );
   const [filter, setFilter] = useState<string>("Todos");
+  const [loader, setLoader] = useState(true);
 
   const getOperator = async () => {
+    setLoader(true);
     try {
       const res = await getAllOperator();
       setOperators(res);
       setFilteredOperators(res);
     } catch (error) {
       console.log(" error ", error);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -103,11 +108,17 @@ const OperatorPage = () => {
 
   return (
     <div>
-      <Table
-        renderHeader={headerTableOperator}
-        renderItems={renderOperatorItem}
-        data={filteredOperators}
-      />
+      {loader ? (
+        <div className="flex justify-center items-center h-50">
+          <LoaderTable />
+        </div>
+      ) : (
+        <Table
+          renderHeader={headerTableOperator}
+          renderItems={renderOperatorItem}
+          data={filteredOperators}
+        />
+      )}
     </div>
   );
 };
