@@ -2,6 +2,7 @@
 
 import { LoaderTable } from "@/components/Loader";
 import { Table } from "@/components/Table";
+import useWebSocket from "@/hooks/useWebSocket";
 import { getAllClient } from "@/services/client";
 import { useEffect, useState } from "react";
 
@@ -14,6 +15,11 @@ interface ClientProps {
 const ClientsPage = () => {
   const [client, setClient] = useState<ClientProps[]>();
   const [Loader, setLoader] = useState(true);
+
+  const { data, error, isConnected, currentSocket } = useWebSocket(
+    "wss://293mw169-7269.use2.devtunnels.ms/ws"
+  );
+
   const getClient = async () => {
     setLoader(true);
     try {
@@ -57,6 +63,12 @@ const ClientsPage = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (isConnected) {
+      console.log(data);
+    }
+  }, [isConnected, data]);
 
   useEffect(() => {
     getClient();

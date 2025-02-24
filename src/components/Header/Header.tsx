@@ -12,7 +12,7 @@ export const Header = () => {
     <header className="bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md py-4 px-6">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold tracking-wide">
-          SandsTech
+          Call center Tech
         </Link>
         <nav className="hidden md:flex gap-6">
           <Link href="/operators" className="hover:text-gray-200">

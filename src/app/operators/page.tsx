@@ -1,6 +1,7 @@
 "use client";
 import { LoaderTable } from "@/components/Loader";
 import { Table } from "@/components/Table";
+import useWebSocket from "@/hooks/useWebSocket";
 import { getAllOperator } from "@/services/operator";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,10 @@ const OperatorPage = () => {
   );
   const [filter, setFilter] = useState<string>("Todos");
   const [loader, setLoader] = useState(true);
+  const { data, error, isConnected, currentSocket } = useWebSocket<{
+    Id: number;
+    Status: string;
+  }>("wss://293mw169-7269.use2.devtunnels.ms/ws");
 
   const getOperator = async () => {
     setLoader(true);
@@ -44,6 +49,23 @@ const OperatorPage = () => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(event.target.value);
   };
+
+  useEffect(() => {
+    // getClient();
+    if (isConnected) {
+      setOperators((prev) =>
+        prev.map((op) => {
+          if (data && data.Id.toString() === op.id) {
+            return {
+              ...op,
+              status: data.Status,
+            };
+          }
+          return op;
+        })
+      );
+    }
+  }, [isConnected, data]);
 
   useEffect(() => {
     getOperator();
