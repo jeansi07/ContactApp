@@ -7,9 +7,16 @@ interface OperatorsResponse {
   id: string;
   status: string;
 }
-export const getAllOperator = async (): Promise<OperatorsResponse[]> => {
+export const getAllOperator = async (
+  name?: string
+): Promise<OperatorsResponse[]> => {
   const resp = await axios.get<OperatorsResponse[]>(
-    "https://293mw169-7269.use2.devtunnels.ms/api/operators"
+    `https://293mw169-7269.use2.devtunnels.ms/api/operators`,
+    {
+      params: {
+        name,
+      },
+    }
   );
   if (resp.data && resp.status === 200) {
     return resp.data;
