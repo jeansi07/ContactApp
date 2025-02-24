@@ -6,9 +6,16 @@ interface ClientResponse {
   time: string;
   id: string;
 }
-export const getAllClient = async (): Promise<ClientResponse[]> => {
+export const getAllClient = async (
+  name?: string
+): Promise<ClientResponse[]> => {
   const resp = await axios.get<ClientResponse[]>(
-    "https://293mw169-7269.use2.devtunnels.ms/api/clients"
+    `https://293mw169-7269.use2.devtunnels.ms/api/clients`,
+    {
+      params: {
+        name,
+      },
+    }
   );
   if (resp.data && resp.status === 200) {
     return resp.data;
