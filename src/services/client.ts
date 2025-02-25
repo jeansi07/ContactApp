@@ -10,7 +10,7 @@ export const getAllClient = async (
   name?: string
 ): Promise<ClientResponse[]> => {
   const resp = await axios.get<ClientResponse[]>(
-    `https://293mw169-7269.use2.devtunnels.ms/api/clients`,
+    `${process.env.NEXT_PUBLIC_API_URL}clients`,
     {
       params: {
         name,

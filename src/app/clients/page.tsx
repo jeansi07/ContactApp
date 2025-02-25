@@ -19,7 +19,7 @@ const ClientsPage = () => {
   const { data, isConnected } = useWebSocket<{
     type: string;
     data: ClientProps[];
-  }>("wss://293mw169-7269.use2.devtunnels.ms/ws");
+  }>(process.env.NEXT_PUBLIC_API_SOCKET_URL ?? "");
 
   const handleSearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
