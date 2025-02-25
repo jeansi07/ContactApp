@@ -22,7 +22,7 @@ const OperatorPage = () => {
 
   const { data, isConnected } = useWebSocket<{
     type: string;
-    data: { id: number; Status: string };
+    data: { id: string; status: string };
   }>("wss://293mw169-7269.use2.devtunnels.ms/ws");
 
   const getOperator = async (name?: string) => {
@@ -68,11 +68,11 @@ const OperatorPage = () => {
         prev.map((op) => {
           if (
             data?.type === "OPERATOR_STATUS_UPDATE" &&
-            data.data.id.toString() === op.id
+            data.data.id === op.id
           ) {
             return {
               ...op,
-              status: data.data.Status,
+              status: data.data.status,
             };
           }
           return op;
@@ -84,10 +84,6 @@ const OperatorPage = () => {
   useEffect(() => {
     getOperator();
   }, []);
-
-  useEffect(() => {
-    filterStatus();
-  }, [filter, operators]);
 
   const headerTableOperator = () => {
     return (
