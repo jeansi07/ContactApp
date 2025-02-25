@@ -11,7 +11,7 @@ export const getAllOperator = async (
   name?: string
 ): Promise<OperatorsResponse[]> => {
   const resp = await axios.get<OperatorsResponse[]>(
-    `https://293mw169-7269.use2.devtunnels.ms/api/operators`,
+    `${process.env.NEXT_PUBLIC_API_URL}operators`,
     {
       params: {
         name,

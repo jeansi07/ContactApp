@@ -23,7 +23,7 @@ const OperatorPage = () => {
   const { data, isConnected } = useWebSocket<{
     type: string;
     data: { id: string; status: string };
-  }>("wss://293mw169-7269.use2.devtunnels.ms/ws");
+  }>(process.env.NEXT_PUBLIC_API_SOCKET_URL ?? "");
 
   const getOperator = async (name?: string) => {
     setLoader(true);
