@@ -16,9 +16,10 @@ const ClientsPage = () => {
   const [client, setClient] = useState<ClientProps[]>();
   const [Loader, setLoader] = useState(true);
   const [search, setSearch] = useState<string | undefined>();
-  const { data, error, isConnected, currentSocket } = useWebSocket(
-    "wss://293mw169-7269.use2.devtunnels.ms/ws"
-  );
+  const { data, isConnected } = useWebSocket<{
+    type: string;
+    data: ClientProps[];
+  }>("wss://293mw169-7269.use2.devtunnels.ms/ws");
 
   const handleSearchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -84,14 +85,11 @@ const ClientsPage = () => {
   };
 
   useEffect(() => {
-    if (isConnected) {
-      console.log(data);
+    setLoader(!isConnected || !data);
+    if (isConnected && data?.type === "CLIENTS_UPDATE") {
+      setClient(data.data);
     }
   }, [isConnected, data]);
-
-  useEffect(() => {
-    getClient();
-  }, []);
 
   return (
     <div>
@@ -104,7 +102,7 @@ const ClientsPage = () => {
               No hay clientes disponibles
             </p>
           )}
-          key="client"
+          keyTable="client"
           renderItems={renderClientItem}
           data={client ?? []}
           renderHeader={headerTableClient}
