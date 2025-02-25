@@ -11,15 +11,15 @@ export const Table = <T extends { id: string }>({
   renderItems,
   renderNotItems,
   renderHeader,
-
+  keyTable,
   data,
 }: TableProps<T>) => {
   return (
-    <>
+    <div>
       {renderHeader?.()}
       {data.length <= 0
         ? renderNotItems?.()
-        : data.map((item) => renderItems(item))}
-    </>
+        : data.map((item, key) => <div key={key}>{renderItems(item)}</div>)}
+    </div>
   );
 };

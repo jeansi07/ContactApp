@@ -21,8 +21,8 @@ const OperatorPage = () => {
   const [loader, setLoader] = useState(true);
 
   const { data, isConnected } = useWebSocket<{
-    Id: number;
-    Status: string;
+    type: string;
+    data: { id: string; status: string };
   }>("wss://293mw169-7269.use2.devtunnels.ms/ws");
 
   const getOperator = async (name?: string) => {
@@ -42,10 +42,18 @@ const OperatorPage = () => {
   };
 
   const filterStatus = () => {
-    if (filter === "Disponibles") {
-      return operators.filter((op) => op.status === "Available");
+    switch (filter) {
+      case "Todos":
+        return operators;
+      case "Llamada":
+        return operators.filter((op) => op.status === "InCall");
+      case "Disponibles":
+        return operators.filter((op) => op.status === "Available");
+      case "Pausa":
+        return operators.filter((op) => op.status === "Pause");
+      default:
+        return operators;
     }
-    return operators;
   };
 
   const filteredOperators = filterStatus();
@@ -58,10 +66,13 @@ const OperatorPage = () => {
     if (isConnected) {
       setOperators((prev) =>
         prev.map((op) => {
-          if (data && data.Id.toString() === op.id) {
+          if (
+            data?.type === "OPERATOR_STATUS_UPDATE" &&
+            data.data.id === op.id
+          ) {
             return {
               ...op,
-              status: data.Status,
+              status: data.data.status,
             };
           }
           return op;
@@ -73,10 +84,6 @@ const OperatorPage = () => {
   useEffect(() => {
     getOperator();
   }, []);
-
-  useEffect(() => {
-    filterStatus();
-  }, [filter, operators]);
 
   const headerTableOperator = () => {
     return (
@@ -94,7 +101,7 @@ const OperatorPage = () => {
             />
             <button
               onClick={() => getOperator(search)}
-              className="px-2 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+              className="px-2 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition flex-shrink-0"
             >
               Buscar operador
             </button>
@@ -108,6 +115,8 @@ const OperatorPage = () => {
             >
               <option value="Todos">Todos</option>
               <option value="Disponibles">Disponibles</option>
+              <option value="Llamada">En llamada</option>
+              <option value="Pausa">En pausa</option>
             </select>
           </div>
         </div>
@@ -141,10 +150,16 @@ const OperatorPage = () => {
                 className={`px-3 py-1 text-sm font-semibold rounded-full ${
                   operator.status === "Available"
                     ? "bg-green-200 text-green-800"
-                    : "bg-red-200 text-red-800"
+                    : operator.status === "InCall"
+                    ? "bg-red-200 text-red-800"
+                    : "bg-yellow-200 text-yellow-800"
                 }`}
               >
-                {operator.status === "Available" ? "Disponible" : "En llamada"}
+                {operator.status === "Available"
+                  ? "Disponible"
+                  : operator.status === "InCall"
+                  ? "En llamada"
+                  : "En pausa"}
               </p>
             </div>
           </div>
