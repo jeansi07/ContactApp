@@ -85,11 +85,14 @@ const ClientsPage = () => {
   };
 
   useEffect(() => {
-    setLoader(!isConnected || !data);
     if (isConnected && data?.type === "CLIENTS_UPDATE") {
       setClient(data.data);
     }
   }, [isConnected, data]);
+
+  useEffect(() => {
+    getClient();
+  }, []);
 
   return (
     <div>
