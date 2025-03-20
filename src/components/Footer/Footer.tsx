@@ -50,18 +50,18 @@ export const Footer = () => {
 
           <div>
             <h3 className="text-lg font-semibold">Síguenos</h3>
-            <div className="flex space-x-4 mt-2">
+            <div className="flex gap-y-1 mt-2 flex-col text-left">
               <a href="#" className="text-gray-400 hover:text-white transition">
-                <i className="fab fa-facebook-f"></i>
+                <i className="fab fa-facebook-f">Facebook </i>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
-                <i className="fab fa-twitter"></i>
+                <i className="fab fa-twitter">X</i>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
-                <i className="fab fa-instagram"></i>
+                <i className="fab fa-instagram">Instagram</i>
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition">
-                <i className="fab fa-linkedin-in"></i>
+                <i className="fab fa-linkedin-in">linkedin</i>
               </a>
             </div>
           </div>
